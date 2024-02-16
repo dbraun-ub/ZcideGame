@@ -3,16 +3,17 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from rules import GameMap, Zone, Actor
+import pytest
+from src import GameMap, Zone, Actor
 
-def simpleCase_createZone():
+def testCreateZone():
     zone1 = Zone(1)
     assert(str(zone1) == "Zone 1")
     assert(zone1.id == 1)
 
     print("simpleCase_createZone: OK")
 
-def simpleCase_addConnections():
+def testAddConnections():
     zone1 = Zone(1)
     zone2 = Zone(2)
 
@@ -28,7 +29,7 @@ def simpleCase_addConnections():
 
     print("simpleCase_addConnections: OK")
 
-def simpleCase_addActor():
+def testAddActor():
     zone1 = Zone(1)
     zone2 = Zone(2)
     Ned = Actor(zone1)
@@ -48,7 +49,7 @@ def simpleCase_addActor():
 
     print("simpleCase_addActor: OK")
 
-def simpleCase_removeActor():
+def testRemoveActor():
     zone1 = Zone(1)
     Ned = Actor(zone1)
     assert(Ned in zone1.actors)
@@ -58,7 +59,7 @@ def simpleCase_removeActor():
 
     print("simpleCase_removeActor: OK")
 
-def simpleCase_addLineOfSight():
+def testAddLineOfSight():
     zone1 = Zone(1)
     zone2 = Zone(2)
     zone3 = Zone(3)
@@ -72,14 +73,3 @@ def simpleCase_addLineOfSight():
     assert(zone2 in zone1.lineOfSight[2])
 
     print("simpleCase_addLineOfSight: OK")
-
-
-def main():
-    simpleCase_createZone()
-    simpleCase_addConnections()
-    simpleCase_addActor()
-    simpleCase_removeActor()
-    simpleCase_addLineOfSight()
-
-if __name__ == "__main__":
-    main()

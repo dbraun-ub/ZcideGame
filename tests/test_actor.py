@@ -1,16 +1,15 @@
 import sys
 import os
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from rules import Actor, Zone
+import pytest
+from src import Actor, Zone
 
-def simpleCase_createActor():
+def test_createActor():
     myZone = Zone(0)
     Ned = Actor(myZone)
-    print("simpleCase_createActor: OK")
 
-def simpleCase_moveActor():
+def test_moveActor():
     zone1 = Zone(1)
     zone2 = Zone(2)
     zone1.addConnection(zone2)
@@ -20,9 +19,8 @@ def simpleCase_moveActor():
     Ned.move(zone2)
 
     assert(Ned.currentZone == zone2)
-    print("simpleCase_moveActor: OK")
 
-def simpleCase_moveActor2():
+def test_moveActor2():
     zone1 = Zone(1)
     zone2 = Zone(2)
     zone3 = Zone(3)
@@ -45,13 +43,3 @@ def simpleCase_moveActor2():
     Ned.move(zone2)
     Ned.move(zone3)
     assert(Ned.currentZone == zone3)
-
-    print("simpleCase_moveActor2: OK")
-
-def main():
-    simpleCase_createActor()
-    simpleCase_moveActor()
-    simpleCase_moveActor2()
-
-if __name__ == "__main__":
-    main()

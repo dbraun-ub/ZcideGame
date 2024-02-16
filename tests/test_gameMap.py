@@ -1,11 +1,35 @@
 import sys
 import os
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from rules import GameMap, Zone, Actor
+import pytest
+from src import GameMap, Zone, Actor
 
-def simpleCase_createZones():
+
+# Variables
+
+inputs = [
+    {"trueShortestPath": [[0,1]], 
+     "connections": {0:[1], 1:[0]}, 
+     "startPosition": 0, 
+     "endPosition": 1
+    },
+    {"trueShortestPath": [[0,3,4,7]], 
+     "connections": {0:[1,2,3], 1:[0,3], 2:[0,5], 3:[0,1,4], 4:[3,7], 5:[2,6], 6:[5,7], 7:[4,6]}, 
+     "startPosition": 0, 
+     "endPosition": 7
+    },
+    {"trueShortestPath": [[1,2,4,8,7],[1,3,4,8,7]], 
+     "connections": {0:[1], 1:[0,2,3], 2:[1,4], 3:[1,4], 4:[2,3,8], 5:[6], 6:[5,7], 7:[6,8], 8:[4,7,9], 9:[8]}, 
+     "startPosition": 1, 
+     "endPosition": 7
+    }
+]
+
+
+# Test functions
+
+def test_createZones():
     myMap = GameMap()
     zone1 = Zone(1)
     zone2 = Zone(2)
@@ -17,9 +41,14 @@ def simpleCase_createZones():
     assert(zone1.connectedZones == myMap.zones[0].connectedZones)
     assert(zone2.connectedZones == myMap.zones[1].connectedZones)
 
-    print("simpleCase_createZones: OK")
 
-def simpleCase_findPathZones(trueShortestPath: list, connections: map, startPosition: int, endPosition: int):
+@pytest.mark.parametrize("testInput", inputs)
+def test_findPathZones(testInput):
+    connections = testInput["connections"]
+    startPosition = testInput["startPosition"]
+    endPosition = testInput["endPosition"]
+    trueShortestPath = testInput["trueShortestPath"]
+
     myMap = GameMap()
 
     for k in connections.keys():
@@ -38,9 +67,10 @@ def simpleCase_findPathZones(trueShortestPath: list, connections: map, startPosi
         for j in range(len(trueShortestPath[i])):
             assert(shortestPath[i][j].id == trueShortestPath[i][j])
 
-    print("simpleCase_findPathZones: OK")
+@pytest.mark.parametrize("testInput", inputs)
+def test_addConnections(testInput):
+    connections = testInput["connections"]
 
-def simpleTest_addConnections(connections: map):
     map1 = GameMap()
     for k in connections.keys():
         for c in connections[k]:
@@ -54,9 +84,13 @@ def simpleTest_addConnections(connections: map):
         for cZone1, cZone2 in zip(zone1.connectedZones, zone2.connectedZones):
             assert(cZone1.id == cZone2.id)
 
-    print("simpleTest_addConnections: OK")
 
-def simpleCase_moveActor(connections: map, startPosition: int, endPosition: int):
+@pytest.mark.parametrize("testInput", inputs)
+def test_moveActor(testInput):
+    connections = testInput["connections"]
+    startPosition = testInput["startPosition"]
+    endPosition = testInput["endPosition"]
+
     # Init map
     myMap = GameMap(connections)
 
@@ -71,33 +105,3 @@ def simpleCase_moveActor(connections: map, startPosition: int, endPosition: int)
         for z in shortestPath[i]:
             testActor.move(z)
         assert(testActor.currentZone == zone2)
-
-    print("simpleCase_moveActor: OK")
-
-
-def main():
-    simpleCase_createZones()
-
-    connections1 = {0:[1], 1:[0]}
-    startPosition1, endPosition1 = 0, 1  
-
-    connections2 = {0:[1,2,3], 1:[0,3], 2:[0,5], 3:[0,1,4], 4:[3,7], 5:[2,6], 6:[5,7], 7:[4,6]}
-    startPosition2, endPosition2 = 0, 7
-    
-    connections3 = {0:[1], 1:[0,2,3], 2:[1,4], 3:[1,4], 4:[2,3,8], 5:[6], 6:[5,7], 7:[6,8], 8:[4,7,9], 9:[8]}
-    startPosition3, endPosition3 = 1, 7
-
-    simpleCase_findPathZones([[0,1]], connections1, startPosition1, endPosition1)
-    simpleCase_findPathZones([[0,3,4,7]], connections2, startPosition2, endPosition2)
-    simpleCase_findPathZones([[1,2,4,8,7],[1,3,4,8,7]], connections3, startPosition3, endPosition3)
-
-    simpleTest_addConnections(connections1)
-    simpleTest_addConnections(connections2)
-    simpleTest_addConnections(connections3)
-
-    simpleCase_moveActor(connections1, startPosition1, endPosition1)
-    simpleCase_moveActor(connections2, startPosition2, endPosition2)
-    simpleCase_moveActor(connections3, startPosition3, endPosition3)
-
-if __name__ == "__main__":
-    main()
