@@ -6,6 +6,7 @@ from .zone import Zone
 class GameMap:
     def __init__(self, connections={}):
         self.zones = []
+        self.addConnections(connections)
 
     def addZone(self, newZone: Zone):
         self.zones.append(newZone)
@@ -35,6 +36,12 @@ class GameMap:
             self.addZone(zone2)
 
         self.connectZones(zone1, zone2)
+
+    # generate the map from a connection dictionary. 
+    def addConnections(self, connections: map):
+        for k in connections.keys():
+            for c in connections[k]:
+                self.connectZonesWithId(k, c)
 
     # Shortest path from a to b. 
     # Return the distance and each valid solution. 
