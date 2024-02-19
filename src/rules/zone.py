@@ -37,3 +37,27 @@ class Zone:
                 return True
             
         return False
+
+
+class BuildingZone(Zone):
+    # Building Zones properties:
+    # - can be searched
+    # - Limit line of sight to range one
+    # - Zombie spawn when the building is opened for the first time 
+    # - Each adjacent zone is connected with an open or closed door
+    def __init__(self, id: int):
+        super().__init__(id)
+        self.type = "building"
+        self.canBeSearched = True
+
+
+class StreetZone(Zone):
+    # Street Zones properties:
+    # - can't be searched
+    # - don't block line of sight
+    # - Zombie don't spawn in street zone (except if there is a spawn token)
+    # - Only connected with doors to building zones.
+    def __init__(self, id: int):
+        super().__init__(id)
+        self.type = "street"
+        self.canBeSearched = False

@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import pytest
-from src import GameMap, Zone, Actor
+from src import *
 
 def testCreateZone():
     zone1 = Zone(1)
@@ -73,3 +73,10 @@ def testAddLineOfSight():
     assert(zone2 in zone1.lineOfSight[2])
 
     print("simpleCase_addLineOfSight: OK")
+
+def testTypeOfZones():
+    zone2 = BuildingZone(2)
+    zone3 = StreetZone(3)
+
+    assert(zone2.canBeSearched == True)
+    assert(zone3.canBeSearched == False)
