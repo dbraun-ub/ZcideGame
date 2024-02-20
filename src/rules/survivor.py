@@ -29,8 +29,13 @@ class Survivor(Actor):
         if not self.validInventoryLocation(location) or self.isInInventory(newCard):
             return False
         
+        # Card already in someone else's inventory
+        if newCard.owner is not None:
+            return False
+        
         if len(self.inventory[location]) < self.maxInventorySlots[location]:
             self.inventory[location].append(newCard)
+            newCard.updateOwner(self)
             return True
         
         return False
@@ -56,6 +61,7 @@ class Survivor(Actor):
         for key in self.inventory.keys():
             if toRemoveCard in self.inventory[key]:
                 self.inventory[key].remove(toRemoveCard)
+                toRemoveCard.updateOwner(None)
                 return True
         return False
     

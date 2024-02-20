@@ -4,6 +4,10 @@ class Card():
     def __init__(self, name: str) -> None:
         self.name = name
         self.description = ""
+        self.owner = None
+
+    def updateOwner(self, newOwner):
+        self.owner = newOwner
 
 class Weapon(Card):
     def __init__(self, name: str, type: str, range: list, dice: int, accuracy: int, damage: int, description: str) -> None:
