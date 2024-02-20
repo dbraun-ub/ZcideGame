@@ -86,7 +86,168 @@ def test_equip(Ned: Survivor):
     assert(Expectedinventory == Ned.inventory)
 
 
+testInventory = [
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "regorginize":   {"hands": [2,1], "backpack": [0,3,4]},
+     "expected":      {"hands": [2,1], "backpack": [0,3,4]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0], "backpack": [2,3,4]},
+     "regorginize":   {"hands": [3,4], "backpack": [0,2]},
+     "expected":      {"hands": [3,4], "backpack": [0,2]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "regorginize":   {"hands": [], "backpack": [0,1,2,3,4]},
+     "expected":      {"hands": [0,1], "backpack": [2,3,4]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "regorginize":   {"hands": [0,1,2,3,4], "backpack": []},
+     "expected":      {"hands": [0,1], "backpack": [2,3,4]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "regorginize":   {"hands": [0,1], "backpack": [2,3]},
+     "expected":      {"hands": [0,1], "backpack": [2,3,4]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "regorginize":   {"hands": [0], "backpack": [2,3]},
+     "expected":      {"hands": [0,1], "backpack": [2,3,4]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "regorginize":   {"hands": [0], "backpack": [2,3,3]},
+     "expected":      {"hands": [0,1], "backpack": [2,3,4]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4"), Card("5")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "regorginize":   {"hands": [0,1], "backpack": [2,3,5]},
+     "expected":      {"hands": [0,1], "backpack": [2,3,4]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4"), Card("5")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "regorginize":   {"hands": [0,5], "backpack": [1,3,4]},
+     "expected":      {"hands": [0,1], "backpack": [2,3,4]}
+    }
+]
 
+@pytest.mark.parametrize("testInput", testInventory)
+def test_reorganizeInventory(testInput, Ned):
+    cards = testInput["cards"]
+    inventory = {}
+    for key in testInput["initInventory"]:
+        inventory[key] = []
+        for id in testInput["initInventory"][key]:
+            inventory[key].append(cards[id])
+            Ned.equip(cards[id], key)
+    assert(Ned.inventory == inventory)
 
-
+    # reorganize
+    inventory = {}
+    for key in testInput["regorginize"]:
+        inventory[key] = []
+        for id in testInput["regorginize"][key]:
+            inventory[key].append(cards[id])
     
+    expected = {}
+    for key in testInput["expected"]:
+            expected[key] = []
+            for id in testInput["expected"][key]:
+                expected[key].append(cards[id])
+
+    Ned.reorganize(inventory["hands"], inventory["backpack"])
+    assert(Ned.inventory == expected)
+
+
+testRemove = [
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "cardToRemove":  0,
+     "functionReturn": True,
+     "expected":      {"hands": [1], "backpack": [2,3,4]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3,4]},
+     "cardToRemove":  4,
+     "functionReturn": True,
+     "expected":      {"hands": [0,1], "backpack": [2,3]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Card("4")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3]},
+     "cardToRemove":  4,
+     "functionReturn": False,
+     "expected":      {"hands": [0,1], "backpack": [2,3]}
+    },
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Survivor(Zone(1), "Not a card")],
+     "initInventory": {"hands": [0,1], "backpack": [2,3]},
+     "cardToRemove":  4,
+     "functionReturn": False,
+     "expected":      {"hands": [0,1], "backpack": [2,3]}
+    }
+]
+
+@pytest.mark.parametrize("testInput", testRemove)
+def test_reorganizeInventory(testInput, Ned):
+    cards = testInput["cards"]
+    inventory = {}
+    for key in testInput["initInventory"]:
+        inventory[key] = []
+        for id in testInput["initInventory"][key]:
+            inventory[key].append(cards[id])
+            Ned.equip(cards[id], key)
+    assert(Ned.inventory == inventory)
+
+    assert(Ned.removeCard(cards[testInput["cardToRemove"]]) == testInput["functionReturn"])
+
+    inventory = {}
+    for key in testInput["expected"]:
+        inventory[key] = []
+        for id in testInput["expected"][key]:
+            inventory[key].append(cards[id])
+
+    assert(Ned.inventory == inventory)
+
+testValidLocation = [
+    {"location": "hands",
+     "valid": True
+    },
+    {"location": "backpack",
+     "valid": True
+    },
+    {"location": "test",
+     "valid": False
+    },
+    {"location": "hand",
+     "valid": False
+    },
+    {"location": "Backpack",
+     "valid": False
+    }
+]
+
+@pytest.mark.parametrize("testInput", testValidLocation)
+def test_validInventoryLocation(Ned, testInput):
+    assert(Ned.validInventoryLocation(testInput["location"]) == testInput["valid"])
+
+
+def test_isInInventory(Ned):
+    card1 = Card("test") 
+    card2 = Card("test2")
+    assert(Ned.isInInventory(card1) == False)
+    assert(Ned.isInInventory(card2) == False)
+
+    Ned.equip(card1, "hands")
+    assert(Ned.isInInventory(card1) == True)
+    assert(Ned.isInInventory(card2) == False)
+
+    Ned.removeCard(card1)
+    assert(Ned.isInInventory(card1) == False)
+    assert(Ned.isInInventory(card2) == False)
+
+    Amy = Survivor(Zone(1), "Amy")
+    Amy.equip(card1, "backpack")
+    assert(Ned.isInInventory(card1) == False)
+    assert(Amy.isInInventory(card1) == True)

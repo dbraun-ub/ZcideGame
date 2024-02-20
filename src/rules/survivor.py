@@ -37,11 +37,14 @@ class Survivor(Actor):
     
     def reorganize(self, cardsHands: list, cardsBackpack: list):
         # test if the cards are the same
-        if sorted(self.inventory["hands"] + self.inventory["backpack"]) != sorted(cardsHands + cardsBackpack):
+        if len(self.inventory["hands"] + self.inventory["backpack"]) != len(cardsHands + cardsBackpack):
             return False
+        for card in self.inventory["hands"] + self.inventory["backpack"]:
+            if card not in cardsHands + cardsBackpack:
+                return False
         
         # New organisation don't exceed the allowed slots
-        if (len(cardsHands) > self.maxInventorySlots["hands"]) or (len(cardsBackpack) > self.maxmaxInventorySlots["backpack"]):
+        if (len(cardsHands) > self.maxInventorySlots["hands"]) or (len(cardsBackpack) > self.maxInventorySlots["backpack"]):
             return False
         
         self.inventory = {"hands": cardsHands, "backpack": cardsBackpack}
