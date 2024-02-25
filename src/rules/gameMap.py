@@ -72,3 +72,10 @@ class GameMap:
         outputPath = [validPath for validPath in memoPath[i] if zone2 in validPath]
         return outputPath
 
+    # A TESTER
+    def findZonePerId(self, id):
+        for zone in self.zones:
+            if zone.id == id:
+                return zone
+            
+        return None
