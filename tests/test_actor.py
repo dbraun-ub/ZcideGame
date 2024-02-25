@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import pytest
-from src import Actor, Zone
+from src import *
 
 def test_createActor():
     myZone = Zone(0)
