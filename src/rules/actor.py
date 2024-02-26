@@ -1,7 +1,14 @@
+# To generate unique ID
+import uuid
+
 class Actor:
-    def __init__(self, id, startingZoneId=None, actions: int = 1):
-        # zone id
-        self.id = id
+    def __init__(self, id=None, startingZoneId=None, actions: int = 1):
+        if id is None:
+            self.id = uuid.uuid4()
+        else:
+            self.id = id
+        
+
         self.zoneId = startingZoneId 
         self.actions = actions
 
@@ -12,6 +19,8 @@ class Actor:
     def getId(self): return self.id
         
     def getZoneId(self): return self.zoneId
+
+    def getActions(self): return self.actions
 
     # Move to an adjacent zone.
     def moveToZone(self, adjZoneId):

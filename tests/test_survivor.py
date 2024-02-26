@@ -11,7 +11,7 @@ from src import *
 @pytest.fixture
 def Ned():
     zone = Zone(1)
-    ned = Survivor(zone, "Ned")
+    ned = Survivor(0, zone.getId(), "Ned")
     return ned
 
 def test_survivor(Ned: Survivor):
@@ -181,7 +181,7 @@ testRemove = [
      "functionReturn": False,
      "expected":      {"hands": [0,1], "backpack": [2,3]}
     },
-    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Survivor(Zone(1), "Not a card")],
+    {"cards": [Card("0"), Card("1"), Card("2"), Card("3"), Survivor(1, Zone(1), "Not a card")],
      "initInventory": {"hands": [0,1], "backpack": [2,3]},
      "cardToRemove":  4,
      "functionReturn": False,
@@ -247,7 +247,7 @@ def test_isInInventory(Ned):
     assert(Ned.isInInventory(card1) == False)
     assert(Ned.isInInventory(card2) == False)
 
-    Amy = Survivor(Zone(1), "Amy")
+    Amy = Survivor(2, Zone(1), "Amy")
     Amy.equip(card1, "backpack")
     assert(Ned.isInInventory(card1) == False)
     assert(Amy.isInInventory(card1) == True)

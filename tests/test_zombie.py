@@ -53,16 +53,16 @@ zombieTypes = [
 ]
 
 @pytest.mark.parametrize("testInput", zombieTypes)
-def test_zombieType(testInput):
-    zombie = testInput["class"](testInput["startingZone"], testInput["numberOfZombies"])
+def test_createZombie(testInput):
+    zombie = testInput["class"](testInput["startingZone"].getId(), testInput["numberOfZombies"])
 
     assert(str(zombie) == testInput["ExpectedString"])
-    assert(zombie.currentZone == testInput["startingZone"])
-    assert(zombie.actions == testInput["actions"])
-    assert(zombie.damageToKill == testInput["damageToKill"])
-    assert(zombie.damagePerAttack == testInput["damagePerAttack"])
-    assert(zombie.attackRange == testInput["attackRange"])
-    assert(zombie.numberOfZombies == testInput["numberOfZombies"])
-    assert(zombie.xp == testInput["xp"])
+    assert(zombie.getZoneId() == testInput["startingZone"].getId())
+    assert(zombie.getActions() == testInput["actions"])
+    assert(zombie.getDamageToKill() == testInput["damageToKill"])
+    assert(zombie.getDamagePerAttack() == testInput["damagePerAttack"])
+    assert(zombie.getAttackRange() == testInput["attackRange"])
+    assert(zombie.getNumberOfZombies() == testInput["numberOfZombies"])
+    assert(zombie.getXpReward() == testInput["xp"])
 
     
