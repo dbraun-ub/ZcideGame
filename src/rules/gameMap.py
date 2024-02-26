@@ -8,6 +8,13 @@ class GameMap:
         self.zones = {}
         self.addConnections(connections)
 
+    ## Getters
+    def getZone(self, zoneId: int): 
+        if zoneId in self.zones:
+            return self.zones[zoneId]    
+        return None
+    
+    ## Methods
     def addZone(self, newZone: Zone):
         self.zones[newZone.getId()] = newZone
 
