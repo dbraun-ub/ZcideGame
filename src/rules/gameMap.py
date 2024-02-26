@@ -5,37 +5,24 @@ from .zone import Zone
 
 class GameMap:
     def __init__(self, connections={}):
-        self.zones = []
+        self.zones = {}
         self.addConnections(connections)
 
     def addZone(self, newZone: Zone):
-        self.zones.append(newZone)
+        self.zones[newZone.getId()] = newZone
 
     def connectZones(self, zone1: Zone, zone2: Zone):
         zone1.addConnection(zone2)
         zone2.addConnection(zone1)
 
     def connectZonesWithId(self, id1, id2):
-        id1Exists = False
-        id2Exists = False
-        for z in self.zones:
-            if z.id == id1: 
-                id1Exists = True
-                zone1 = z
-            if z.id == id2: 
-                id2Exists = True
-                zone2 = z
-            if id2Exists and id1Exists: 
-                break
+        if id1 not in self.zones.keys():
+            self.addZone(Zone(id1))
 
-        if not id1Exists: 
-            zone1 = Zone(id1)
-            self.addZone(zone1)
-        if not id2Exists: 
-            zone2 = Zone(id2)
-            self.addZone(zone2)
+        if id2 not in self.zones.keys():
+            self.addZone(Zone(id2))
 
-        self.connectZones(zone1, zone2)
+        self.connectZones(self.zones[id1], self.zones[id2])
 
     # generate the map from a connection dictionary. 
     def addConnections(self, connections: map):
@@ -47,7 +34,7 @@ class GameMap:
     # Return the distance and each valid solution. 
     # If no valide solution, return distance -1 and empty list.
     def shortestPathZones(self, zone1: Zone, zone2: Zone):
-        if (zone1 not in self.zones) or (zone2 not in self.zones):
+        if (zone1.getId() not in self.zones.keys()) or (zone2.getId() not in self.zones.keys()):
             return [[]]
 
         # Distance one between each zone.
@@ -71,11 +58,20 @@ class GameMap:
 
         outputPath = [validPath for validPath in memoPath[i] if zone2 in validPath]
         return outputPath
+    
+    def shortestPathZonesPerId(self, zoneId1, zoneId2):
+        if (zoneId1 not in self.zones.keys()) or (zoneId2 not in self.zones.keys()):
+            return [[]]
+        
+        return self.shortestPathZones(self.zones[zoneId1], self.zones[zoneId2])
 
     # A TESTER
     def findZonePerId(self, id):
-        for zone in self.zones:
-            if zone.id == id:
-                return zone
+        # for zone in self.zones:
+        #     if zone.id == id:
+        #         return zone
+
+        if id in self.zones.keys():
+            return self.zones[id]
             
         return None

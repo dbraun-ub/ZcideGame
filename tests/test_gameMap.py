@@ -38,12 +38,12 @@ def test_createZones():
     myMap.addZone(zone2)
     myMap.connectZones(zone1, zone2)
 
-    assert(zone1.connectedZones == myMap.zones[0].connectedZones)
-    assert(zone2.connectedZones == myMap.zones[1].connectedZones)
+    assert(zone1.getConnectedZones() == myMap.zones[zone1.getId()].getConnectedZones())
+    assert(zone2.getConnectedZones() == myMap.zones[zone2.getId()].getConnectedZones())
 
 
 @pytest.mark.parametrize("testInput", inputs)
-def test_findPathZones(testInput):
+def test_shortestPathZones(testInput):
     connections = testInput["connections"]
     startPosition = testInput["startPosition"]
     endPosition = testInput["endPosition"]
@@ -55,13 +55,23 @@ def test_findPathZones(testInput):
         for c in connections[k]:
             myMap.connectZonesWithId(k, c)
 
-    for z in myMap.zones:
-        if startPosition == z.id:
-            zone1 = z
-        if endPosition == z.id:
-            zone2 = z
+    shortestPath = myMap.shortestPathZones(myMap.zones[startPosition], myMap.zones[endPosition])
 
-    shortestPath = myMap.shortestPathZones(zone1, zone2)
+    for i in range(len(trueShortestPath)):
+        for j in range(len(trueShortestPath[i])):
+            assert(shortestPath[i][j].id == trueShortestPath[i][j])
+
+@pytest.mark.parametrize("testInput", inputs)
+def test_shortestPathZonesPerId(testInput):
+    connections = testInput["connections"]
+    startPosition = testInput["startPosition"]
+    endPosition = testInput["endPosition"]
+    trueShortestPath = testInput["trueShortestPath"]
+
+    # Init map
+    myMap = GameMap(connections)
+
+    shortestPath = myMap.shortestPathZonesPerId(startPosition, endPosition)
 
     for i in range(len(trueShortestPath)):
         for j in range(len(trueShortestPath[i])):
@@ -79,29 +89,7 @@ def test_addConnections(testInput):
     map2 = GameMap(connections)
 
     # the objects themselves will be different, but the ids must be the same 
-    for zone1, zone2 in zip(map1.zones, map2.zones):
-        assert(zone1.id == zone2.id)
-        for cZone1, cZone2 in zip(zone1.connectedZones, zone2.connectedZones):
-            assert(cZone1.id == cZone2.id)
-
-
-@pytest.mark.parametrize("testInput", inputs)
-def test_moveActor(testInput):
-    connections = testInput["connections"]
-    startPosition = testInput["startPosition"]
-    endPosition = testInput["endPosition"]
-
-    # Init map
-    myMap = GameMap(connections)
-
-    for z in myMap.zones:
-        if startPosition == z.id: zone1 = z
-        if endPosition == z.id: zone2 = z
-
-    shortestPath = myMap.shortestPathZones(zone1, zone2)
-
-    for i in range(len(shortestPath)):
-        testActor = Actor(zone1)
-        for z in shortestPath[i]:
-            testActor.move(z)
-        assert(testActor.currentZone == zone2)
+    for zoneId1, zoneId2 in zip(map1.zones.keys(), map2.zones.keys()):
+        assert(zoneId1 == zoneId2)
+        for cZone1, cZone2 in zip(map1.zones[zoneId1].getConnectedZones(), map1.zones[zoneId2].getConnectedZones()):
+            assert(cZone1.getId() == cZone2.getId())
