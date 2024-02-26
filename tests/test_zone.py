@@ -4,14 +4,12 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import pytest
-from src import *
+from src import Zone, Actor, BuildingZone, StreetZone
 
 def testCreateZone():
     zone1 = Zone(1)
     assert(str(zone1) == "Zone 1")
-    assert(zone1.id == 1)
-
-    print("simpleCase_createZone: OK")
+    assert(zone1.getId() == 1)
 
 def testAddConnections():
     zone1 = Zone(1)
@@ -31,33 +29,22 @@ def testAddConnections():
 
 def testAddActor():
     zone1 = Zone(1)
-    zone2 = Zone(2)
-    Ned = Actor(zone1)
+    Ned = Actor(0, None)
+    zone1.addActor(Ned)
     assert(Ned in zone1.actors)
-    assert(Ned not in zone2.actors)
+    assert(Ned.getZoneId() == 1)
 
-    Ned.move(zone2)
-    assert(Ned in zone1.actors)
-    assert(Ned not in zone2.actors)
-
-    zone1.addConnection(zone2)
-    zone2.addConnection(zone1)
-
-    Ned.move(zone2)
-    assert(Ned not in zone1.actors)
-    assert(Ned in zone2.actors)
-
-    print("simpleCase_addActor: OK")
 
 def testRemoveActor():
     zone1 = Zone(1)
-    Ned = Actor(zone1)
+    Ned = Actor(0, None)
+    zone1.addActor(Ned)
     assert(Ned in zone1.actors)
 
     zone1.removeActor(Ned)
     assert(Ned not in zone1.actors)
+    assert(Ned.getZoneId() == None)
 
-    print("simpleCase_removeActor: OK")
 
 def testAddLineOfSight():
     zone1 = Zone(1)
@@ -72,7 +59,6 @@ def testAddLineOfSight():
     assert(zone2 not in zone1.lineOfSight[1])
     assert(zone2 in zone1.lineOfSight[2])
 
-    print("simpleCase_addLineOfSight: OK")
 
 def testTypeOfZones():
     zone2 = BuildingZone(2)

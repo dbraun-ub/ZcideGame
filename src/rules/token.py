@@ -1,15 +1,10 @@
-from zone import Zone
-
 class Token:
-    def __init__(self, currentZone: Zone):
-        self.setZone(currentZone)
+    def __init__(self):
+        pass
 
-    def setZone(self, currentZone):
-        self.currentZone = currentZone
-        self.currentZone.addToken(self)
 
 class ObjectiveToken(Token):
-    def __init__(self, currentZone: Zone, xp=5, color="red"):
-        super().__init__(currentZone)
+    def __init__(self, xp=5, color="red"):
+        super().__init__()
         self.xp = 5
         self.color = color

@@ -1,5 +1,5 @@
-from token import Token
-from actor import Actor
+from .token import Token
+from .actor import Actor
 
 class Zone:
     def __init__(self, id: int):
@@ -12,6 +12,9 @@ class Zone:
     def __str__(self) -> str:
         return f"Zone {self.id}"
     
+    def getId(self):
+        return self.id
+    
     def addConnection(self, newZone) -> None:
         if (newZone not in self.connectedZones) and (newZone is not self):
             self.connectedZones.append(newZone)
@@ -19,9 +22,12 @@ class Zone:
     def addActor(self, newActor: Actor) -> None:
         if newActor not in self.actors:
             self.actors.append(newActor)
+            newActor.moveToZone(self.id)
 
     def removeActor(self, oldActor) -> None:
-        self.actors.remove(oldActor)
+        if oldActor in self.actors:
+            self.actors.remove(oldActor)
+            oldActor.moveToZone(None)
 
     def addLineOfSight(self, newZone, distance: int) -> None:
         if distance not in self.lineOfSight.keys():
