@@ -92,3 +92,8 @@ class StreetZone(Zone):
         super().__init__(id)
         self.type = "street"
         self.canBeSearched = False
+
+def createZone(zoneType: str, id):
+    zoneTypes = {"BuildingZone": BuildingZone, "StreetZone": StreetZone}
+    
+    return zoneTypes[zoneType](id)

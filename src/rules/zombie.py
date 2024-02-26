@@ -72,3 +72,12 @@ class Brute(Zombie):
         xp = 1
         super().__init__(startingZoneId, actions, damageToKill, damagePerAttack, attackRange, numberOfZombies, xp, id)
         self.type = "brute"
+
+def createZombie(zombietype: str, startingZoneId: int, numberOfZombies: int, id=None):
+    zType = {
+        "walker": Walker,
+        "runner": Runner,
+        "brute": Brute
+    }
+
+    return zType[zombietype](startingZoneId, numberOfZombies, id)
