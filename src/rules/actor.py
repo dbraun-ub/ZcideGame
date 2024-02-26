@@ -8,28 +8,24 @@ class Actor:
         else:
             self.id = id
         
-
         self.zoneId = startingZoneId 
         self.actions = actions
 
     def __str__(self) -> str:
         return f"Actor in Zone {self.zoneId}"
     
-    ## Getter
+    ## Getters
     def getId(self): return self.id
         
     def getZoneId(self): return self.zoneId
 
     def getActions(self): return self.actions
 
+    ## Methods
+
     # Move to an adjacent zone.
     def moveToZone(self, adjZoneId):
-        # The verifications of the possibilty of the movement is done elsewhere.
         self.zoneId = adjZoneId
         self.actions -= 1
-        # if adjZoneId in self.zoneId.connectedZones:
-        #     # self.currentZone.removeActor(self)
-        #     self.zoneId = adjZoneId
-        #     # self.currentZone.addActor(self)
-        #     self.actions -= 1
+
 

@@ -64,5 +64,3 @@ def test_createZombie(testInput):
     assert(zombie.getAttackRange() == testInput["attackRange"])
     assert(zombie.getNumberOfZombies() == testInput["numberOfZombies"])
     assert(zombie.getXpReward() == testInput["xp"])
-
-    
