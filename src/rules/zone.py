@@ -12,8 +12,19 @@ class Zone:
     def __str__(self) -> str:
         return f"Zone {self.id}"
     
-    def getId(self):
-        return self.id
+    ## Getters
+    def getId(self): return self.id
+    
+    def getConnectedZones(self): return self.connectedZones
+
+    def getActors(self): return self.actors
+
+    def getLineOfSight(self): return self.lineOfSight
+
+    def getTokens(self): return self.tokens
+    
+
+    ## Methods
     
     def addConnection(self, newZone) -> None:
         if (newZone not in self.connectedZones) and (newZone is not self):

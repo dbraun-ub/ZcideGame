@@ -39,10 +39,10 @@ def testRemoveActor():
     zone1 = Zone(1)
     Ned = Actor(0, None)
     zone1.addActor(Ned)
-    assert(Ned in zone1.actors)
+    assert(Ned in zone1.getActors())
 
     zone1.removeActor(Ned)
-    assert(Ned not in zone1.actors)
+    assert(Ned not in zone1.getActors())
     assert(Ned.getZoneId() == None)
 
 
@@ -54,10 +54,10 @@ def testAddLineOfSight():
     assert(not zone1.isInLineOfSight(zone2))
     zone1.addLineOfSight(zone2, 1)
     assert(zone1.isInLineOfSight(zone2))
-    assert(zone2 in zone1.lineOfSight[1])
+    assert(zone2 in zone1.getLineOfSight()[1])
     zone1.addLineOfSight(zone2, 2)
-    assert(zone2 not in zone1.lineOfSight[1])
-    assert(zone2 in zone1.lineOfSight[2])
+    assert(zone2 not in zone1.getLineOfSight()[1])
+    assert(zone2 in zone1.getLineOfSight()[2])
 
 
 def testTypeOfZones():
