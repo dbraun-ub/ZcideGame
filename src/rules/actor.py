@@ -10,6 +10,7 @@ class Actor:
         
         self.zoneId = startingZoneId 
         self.actions = actions
+        self.type = ""
 
     def __str__(self) -> str:
         return f"Actor in Zone {self.zoneId}"
@@ -20,6 +21,8 @@ class Actor:
     def getZoneId(self): return self.zoneId
 
     def getActions(self): return self.actions
+
+    def getType(self): return self.type
 
     ## Methods
 

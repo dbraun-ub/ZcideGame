@@ -1,10 +1,9 @@
 from .actor import Actor
-from .zone import Zone
 
 
 class Zombie(Actor):
-    def __init__(self, startingZone: Zone, actions: int, damageToKill: int, damagePerAttack: int, attackRange: int, numberOfZombies: int, xp: int, id=None):
-        super().__init__(id, startingZone, actions)
+    def __init__(self, startingZoneId: int, actions: int, damageToKill: int, damagePerAttack: int, attackRange: int, numberOfZombies: int, xp: int, id=None):
+        super().__init__(id, startingZoneId, actions)
         self.damageToKill = damageToKill
         self.damagePerAttack = damagePerAttack
         self.attackRange = attackRange
@@ -26,8 +25,6 @@ class Zombie(Actor):
 
     def getXpReward(self): return self.xpReward
 
-    def getType(self): return self.type
-
 
     # Methods
     def attack(self, targetActor: Actor):
@@ -45,31 +42,40 @@ class Zombie(Actor):
             return hits
 
 class Walker(Zombie):
-    def __init__(self, startingZone: Zone, numberOfZombies: int, id=None):
+    def __init__(self, startingZoneId: int, numberOfZombies: int, id=None):
         actions = 1
         damageToKill = 1
         damagePerAttack = 1
         attackRange = 0
         xp = 1
-        super().__init__(startingZone, actions, damageToKill, damagePerAttack, attackRange, numberOfZombies, xp, id)
+        super().__init__(startingZoneId, actions, damageToKill, damagePerAttack, attackRange, numberOfZombies, xp, id)
         self.type = "walker"
 
 class Runner(Zombie):
-    def __init__(self, startingZone: Zone, numberOfZombies: int, id=None):
+    def __init__(self, startingZoneId: int, numberOfZombies: int, id=None):
         actions = 2
         damageToKill = 1
         damagePerAttack = 1
         attackRange = 0
         xp = 1
-        super().__init__(startingZone, actions, damageToKill, damagePerAttack, attackRange, numberOfZombies, xp, id)
+        super().__init__(startingZoneId, actions, damageToKill, damagePerAttack, attackRange, numberOfZombies, xp, id)
         self.type = "runner"
     
 class Brute(Zombie):
-    def __init__(self, startingZone: Zone, numberOfZombies: int, id=None):
+    def __init__(self, startingZoneId: int, numberOfZombies: int, id=None):
         actions = 1
         damageToKill = 2
         damagePerAttack = 1
         attackRange = 0
         xp = 1
-        super().__init__(startingZone, actions, damageToKill, damagePerAttack, attackRange, numberOfZombies, xp, id)
+        super().__init__(startingZoneId, actions, damageToKill, damagePerAttack, attackRange, numberOfZombies, xp, id)
         self.type = "brute"
+
+def createZombie(zombietype: str, startingZoneId: int, numberOfZombies: int, id=None):
+    zType = {
+        "walker": Walker,
+        "runner": Runner,
+        "brute": Brute
+    }
+
+    return zType[zombietype](startingZoneId, numberOfZombies, id)

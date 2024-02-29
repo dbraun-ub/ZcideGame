@@ -15,6 +15,7 @@ class Survivor(Actor):
         self.backpackInventory = []
         self.maxHandsSlots = 2
         self.maxBackpackSlots = 3
+        self.type = "Survivor"
 
     def __str__(self) -> str:
         return f"{self.name} is in Zone {self.getZoneId()}, has {self.health} health points, {self.xp} xp and {self.actions} action{'s' if self.actions > 1 else ''} left."
