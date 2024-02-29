@@ -8,6 +8,7 @@ class Zone:
         self.actors = []
         self.lineOfSight = {}
         self.tokens = []
+        self.type = ""
 
     def __str__(self) -> str:
         return f"Zone {self.id}"
@@ -22,6 +23,8 @@ class Zone:
     def getLineOfSight(self): return self.lineOfSight
 
     def getTokens(self): return self.tokens
+
+    def getType(self): return self.type
     
 
     ## Methods
@@ -78,7 +81,7 @@ class BuildingZone(Zone):
     # - Each adjacent zone is connected with an open or closed door
     def __init__(self, id: int):
         super().__init__(id)
-        self.type = "building"
+        self.type = "BuildingZone"
         self.canBeSearched = True
 
 
@@ -90,7 +93,7 @@ class StreetZone(Zone):
     # - Only connected with doors to building zones.
     def __init__(self, id: int):
         super().__init__(id)
-        self.type = "street"
+        self.type = "StreetZone"
         self.canBeSearched = False
 
 def createZone(zoneType: str, id):
