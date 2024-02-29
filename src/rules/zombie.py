@@ -25,8 +25,6 @@ class Zombie(Actor):
 
     def getXpReward(self): return self.xpReward
 
-    def getType(self): return self.type
-
 
     # Methods
     def attack(self, targetActor: Actor):
